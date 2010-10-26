@@ -12,7 +12,11 @@ class DocumentNode
 
 
   def is_root?
-    @filename == DocumentTree.root
+    @filename == DocumentTree.root.raw_filename
+  end
+  
+  def raw_filename
+    @filename
   end
   
   # Is it a directory or just a file?
@@ -38,17 +42,15 @@ class DocumentNode
   # The meta information of this node. If it's a file, than the meta.txt of it's child files is taken, else
   # the file itself is taken. From this file the top part must be the YAML meta data.
   def meta_yaml
-    if is_leaf?
+    if !(!is_leaf? && !File.exist?(meta_file))
       passed = false
       out = ""
       File.open(filename).each_line do |line|
+        passed = true if line == "\n"
         break if passed
         out << line
-        passed = true if line == "\n"
       end
       YAML::load(out)
-    elsif File.exist?(meta_file)
-      YAML::load(File.open(meta_file))
     else
       {:name => raw_name}
     end
@@ -59,11 +61,13 @@ class DocumentNode
   def content
     out = ""
     passed = false
-
     File.open(filename) do |f|      
       f.each_line do |line|
-        out << line if passed
-        passed = true if line == "\n"
+        if line == "\n" && !passed
+          passed = true 
+        else
+          out << line if passed
+        end
       end
     end
     out
@@ -71,8 +75,12 @@ class DocumentNode
   
   # Raw folder name of this node.
   # Strips out 0001_foldername to make positioning possible
-  def raw_name 
-    /.*\/[0-9]*(.*)(.txt)?/.match(@filename)[1].gsub('.txt', '')
+  def raw_name(options = {})
+    out = /.*\/[0-9]*_?(.*)(.txt)?/.match(@filename)[1]
+    out.gsub!('.txt', '') unless options[:ext]
+    out
+    #out.gsub('.txt', '') #
+    out
   end
 
   # Searches breadth first till name is found
@@ -97,6 +105,11 @@ class DocumentNode
       all += n.children
     end
     all
+  end
+  
+  
+  def name
+    meta_yaml['name'] || raw_name
   end
   
   

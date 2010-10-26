@@ -5,8 +5,8 @@ begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
     gem.name = "document_tree"
-    gem.summary = %Q{TODO: one-line summary of your gem}
-    gem.description = %Q{TODO: longer description of your gem}
+    gem.summary = %Q{Transforms a file system in a tree with content and meta data.}
+    gem.description = %Q{}
     gem.email = "jaapvandermeer@gmail.com"
     gem.homepage = "http://github.com/japetheape/document_tree"
     gem.authors = ["Jaap van der Meer"]

@@ -1,4 +1,5 @@
 
+require 'document_node'
 module DocumentTree
   
   
@@ -11,14 +12,8 @@ module DocumentTree
     
     def root
       @root ||= DocumentNode.new(self.location)
-      
     end
-    
-    
   end
-  
-  
-  
-  
+
 end
 
