@@ -1,7 +1,18 @@
-require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
+require 'spec_helper'
 
-describe "DocumentTree" do
-  it "fails" do
-    fail "hey buddy, you should probably rename this file and start specing for real"
+require 'document_tree'
+require 'document_node'
+include DocumentTree
+
+describe DocumentTree do
+  
+  it "should be able to set another location" do
+    DocumentTree.location.should_not be_nil
+
   end
+  
+  it "should have a root node" do
+    DocumentTree.root.should_not be_nil
+  end
+  
 end
