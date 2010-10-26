@@ -1,16 +1,56 @@
 = document_tree
 
-Description goes here.
+DocumentTree is a gem that can read out a simple file tree. It can be used to generate a tree with documentation in Ruby on Rails, so that pages don't have to 
+be in a database.
 
-== Note on Patches/Pull Requests
- 
-* Fork the project.
-* Make your feature addition or bug fix.
-* Add tests for it. This is important so I don't break it in a
-  future version unintentionally.
-* Commit, do not mess with rakefile, version, or history.
-  (if you want to have your own version, that is fine but bump version in a commit by itself I can ignore when I pull)
-* Send me a pull request. Bonus points for topic branches.
+== Usage
+You must have a folder that will be read some where. For example the following example will generate a tree.
+
+- section (folder)
+  - meta.txt (file)
+  - othersection (folder)
+    - somefile.txt (file)
+    
+    
+If you now invoke DocumentTree.root.name the meta.txt is read for a real name.
+
+
+== Meta data
+All meta data is YAML format. Normal files have meta data on top of the file, splitted by line. Directories have a meta data on top of meta.txt.
+
+== Format folder meta data
+The meta data for a folder is read by reading the meta.txt of it's children.
+For example, meta.txt has the following content, the first line is the YAML meta data, the rest is +content+.
+
+  name: DocumentTree documentation
+  
+  Here comes the text, maybe formatted in some way.
+  Tralala.
+
+Now the following code:
+
+  node = DocumentTree.root 
+  node.name
+  # => DocumentTree.documentation
+  node.content
+  # => Here comes the text, maybe formatted in some way.\nTralala.
+  node.raw_name
+  # => section
+  
+
+== Finding a node
+You can search for a node by doing
+
+  DocumentTree.root.find_node("hisrawname")
+
+
+
+== Returning all nodes
+
+  DocumentTree.root.all_nodes
+
+
+
 
 == Copyright
 

@@ -41,6 +41,16 @@ describe DocumentNode do
     node.meta_data['name'].should == "Men"
     node.content.should == "Testerdetest"
   end
+
+
+  it "should find a node" do
+    found = DocumentTree.root.find_node('other_section')
+    found.should_not be_nil
+  end
   
+  it "should have all nodes" do
+    all = DocumentTree.root.all_nodes
+    all.length.should == 4
+  end
   
 end
